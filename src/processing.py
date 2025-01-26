@@ -1,29 +1,36 @@
-def filter_by_state(transactions: list, state='EXECUTED') -> list:
+from typing import List, Any
+
+
+def filter_by_state(operations: list, state: str = 'EXECUTED') -> list:
+    """Фильтрует список операций по статусу.
+
+    Аргументы:
+    operations (list): Список словарей с операциями.
+    state (str): Статус, по которому производится фильтрация. По умолчанию 'EXECUTED'.
+
+    Возвращает:
+    list: Отфильтрованный список операций.
     """
-    Фильтрует список транзакций по состоянию.
+    filtered_operations: list[Any] = []
+    for operation in operations:
+        if operation['state'] == state:
+            filtered_operations.append(operation)
+    return filtered_operations
 
-    :transactions: Список словарей с транзакциями.
-    :state: Состояние транзакции для фильтрации (по умолчанию 'EXECUTED').
-    :return: Новый список словарей, соответствующих переданному состоянию.
+
+import datetime
+
+def sort_by_date(operations: list, order: bool = True) -> list:
+    """Сортирует список операций по дате.
+
+    Аргументы:
+    operations (list): Список словарей с операциями.
+    order (bool): Порядок сортировки. True - по возрастанию, False - по убыванию. По умолчанию True.
+
+    Возвращает:
+    list: Отсортированный список операций.
     """
-    return [transaction for transaction in transactions if transaction['state'] == state]
+    def date_key(operation):
+        return datetime.datetime.strptime(operation['date'], "%Y-%m-%dT%H:%M:%S")
 
-
-from datetime import datetime
-
-
-def sort_by_date(transactions: list, descending=True) -> list:
-    """
-    Сортирует список транзакций по дате.
-
-    :transactions: Список словарей с транзакциями.
-    :descending: Порядок сортировки (по умолчанию True - по убыванию).
-    :return: Отсортированный список словарей.
-    """
-
-    def get_date(transaction):
-        return datetime.strptime(transaction['date'], '%Y-%m-%dT%H:%M:%S.%f')
-
-    sorted_transactions = sorted(transactions, key=get_date, reverse=descending)
-    return sorted_transactions
-
+    return sorted(operations, key=date_key, reverse=(not order))
