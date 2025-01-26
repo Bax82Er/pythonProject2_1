@@ -1,4 +1,5 @@
-from typing import List, Any
+import datetime
+from typing import Any
 
 
 def filter_by_state(operations: list, state: str = 'EXECUTED') -> list:
@@ -11,14 +12,12 @@ def filter_by_state(operations: list, state: str = 'EXECUTED') -> list:
     Возвращает:
     list: Отфильтрованный список операций.
     """
-    filtered_operations: list[Any] = []
+    filtered_operations: list['Any'] = []
     for operation in operations:
         if operation['state'] == state:
             filtered_operations.append(operation)
     return filtered_operations
 
-
-import datetime
 
 def sort_by_date(operations: list, order: bool = True) -> list:
     """Сортирует список операций по дате.
