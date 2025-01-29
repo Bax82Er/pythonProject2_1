@@ -17,8 +17,7 @@ def get_mask_card_number(local_card_number: str) -> str:
         raise ValueError("Неверная длина номера карты")
 
     return (
-        f"{local_card_number[:6]} {local_card_number[6:10].replace(' ', '*')} "
-        f"{local_card_number[10:14].replace(' ', '*')} {local_card_number[-4:]}"
+        f"{local_card_number[:6]} {'*' * 4} {'*' * 4} {local_card_number[-4:]}"
     )
 
 
@@ -33,10 +32,13 @@ def get_mask_account(account_number: Union[str, int]) -> str:
     :return: Маска номера счета
     :raises ValueError: Если длина номера счета меньше 8 цифр
     """
+    if account_number is None:
+        raise ValueError("Номер счета не может быть пустым")
+
     if isinstance(account_number, int):
         account_number = str(account_number)
 
     if len(account_number) < 8:
         raise ValueError("Неверная длина номера счета")
 
-    return f"**{account_number[-4:]}"
+    return f"{'*' * (len(account_number) - 4)}{account_number[-4:]}"
