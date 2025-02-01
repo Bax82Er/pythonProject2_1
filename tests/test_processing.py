@@ -1,5 +1,5 @@
 import pytest
-from src.processing import filter_by_state, sort_by_date
+import src.processing
 
 @pytest.fixture
 def operations_with_states():
@@ -11,16 +11,16 @@ def operations_with_states():
     ]
 
 def test_filter_by_state_default(operations_with_states):
-    result = filter_by_state(operations_with_states)
+    result = src.processing.filter_by_state(operations_with_states)
     assert len(result) == 2
     assert all(op["state"] == "EXECUTED" for op in result)
 
 def test_filter_by_state_pending(operations_with_states):
-    result = filter_by_state(operations_with_states, state="PENDING")
+    result = src.processing.filter_by_state(operations_with_states, state="PENDING")
     assert len(result) == 1
     assert all(op["state"] == "PENDING" for op in result)
 
 def test_filter_by_state_canceled(operations_with_states):
-    result = filter_by_state(operations_with_states, state="CANCELED")
+    result = src.processing.filter_by_state(operations_with_states, state="CANCELED")
     assert len(result) == 1
     assert all(op["state"] == "CANCELED" for op in result)
