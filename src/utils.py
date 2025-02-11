@@ -1,7 +1,11 @@
 import json
+import logging
+
+# Получение логгера
+logger = logging.getLogger(__name__)
 
 
-def read_json_file(file_path):
+def read_json_file(file_path: str) -> list:
     """
     Читает JSON-файл и возвращает список словарей с данными о финансовых транзакциях.
 
@@ -13,13 +17,15 @@ def read_json_file(file_path):
             data = json.load(f)
 
         if isinstance(data, list):
+            logger.info(f"Успешно прочитан JSON-файл: {file_path}.")
             return data
         else:
-            print("JSON файл не является списком.")
+            logger.warning("JSON файл не является списком.")
             return []
     except FileNotFoundError:
-        print("Файл не найден.")
+        logger.error(f"Файл не найден: {file_path}.")
         return []
     except json.JSONDecodeError:
-        print("Ошибка декодирования JSON.")
+        logger.exception(f"Ошибка декодирования JSON в файле: {file_path}.")
         return []
+
