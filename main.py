@@ -1,7 +1,5 @@
-from typing import Union
 import logging
 from logging.handlers import RotatingFileHandler
-from datetime import datetime
 
 
 # Функция для создания логеров
