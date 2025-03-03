@@ -17,13 +17,12 @@ from src.transactions import (
 def load_data_from_file(file_path):
     """
     Загружает данные о транзакциях из указанного файла.
-'/Users/batrerdnneev/my_prj/pythonProject2/data/transactions.json'
     :param file_path: Путь к файлу с данными.
     :return: Список словарей с данными о транзакциях.
     """
     _, ext = os.path.splitext(file_path)
     if ext == ".json":
-        transactions = []
+
         with open(file_path, 'r') as f:
             return json.load(f)
     elif ext == ".csv":
@@ -42,6 +41,8 @@ def load_data_from_file(file_path):
         return transactions
     else:
         raise ValueError(f"Не поддерживаемый формат файла: {file_path}")
+    transactions = load_data_from_file(file_path)
+    print(f"Загружено транзакций: {len(transactions)}")
 
 
 def main():
@@ -53,13 +54,13 @@ def main():
 
     choice = int(input("Ваш выбор: "))
     if choice == 1:
-        file_path = "data/transactions.json"
-        print(f"Для обработки выбран JSON-файл: {file_path}")
+        file_path = "./data/transactions.json"
+        print(f"Для обработки выбран JSON-файл: ")
     elif choice == 2:
-        file_path = "data/transactions.csv"
+        file_path = "./data/transactions.csv"
         print(f"Для обработки выбран CSV-файл: {file_path}")
     elif choice == 3:
-        file_path = "data/transactions.xlsx"
+        file_path = "./data/transactions.xlsx"
         print(f"Для обработки выбран XLSX-файл: {file_path}")
     else:
         print("Ошибка ввода. Выберите правильный номер пункта меню.")
