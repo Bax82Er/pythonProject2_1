@@ -1,8 +1,11 @@
 import datetime
 from typing import Any
+from typing import List, Dict
+
+def filter_by_state(transactions: List[Dict[str, Any]], status: str = 'EXECUTED') -> List[Dict[str, Any]]:
 
 
-def filter_by_state(operations: list, state: str = 'EXECUTED') -> list:
+#def filter_by_state(transactions: list, status: str = 'EXECUTED') -> list:
     """Фильтрует список операций по статусу.
 
     Аргументы:
@@ -12,11 +15,7 @@ def filter_by_state(operations: list, state: str = 'EXECUTED') -> list:
     Возвращает:
     list: Отфильтрованный список операций.
     """
-    filtered_operations: list['Any'] = []
-    for operation in operations:
-        if operation['state'] == state:
-            filtered_operations.append(operation)
-    return filtered_operations
+    return [transaction for transaction in transactions if transaction['status'] == status]
 
 
 def sort_by_date(operations: list, order: bool = True) -> list:

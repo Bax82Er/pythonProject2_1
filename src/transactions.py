@@ -17,10 +17,15 @@ def filter_transactions_by_status(transactions, status_search):
     return [transaction
         for transaction in transactions
         if transaction.get('status') is not None and pattern.search(transaction['status'])]
-    transactions = "./data/transactions.json"
+
+    file_path = "./data/transactions.json"
+
+    # Загружаем данные из файла
+    transactions = load_data_from_file(file_path)
+    #transactions = "./data/transactions.json"
     status = "EXECUTED"
     filtered_transactions = filter_transactions_by_status(transactions, status)
-    print({filtered_transactions})
+    print(filtered_transactions)
 
 
 def count_operations_by_categories(transactions, categories):

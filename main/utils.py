@@ -80,8 +80,8 @@ def filter_rub_transactions(transactions):
     :param transactions: Список словарей с данными о банковских операциях.
     :return: Список операций, суммы которых указаны в рублях.
     """
-    return [transaction for transaction in transactions if 'руб' in transaction.get('amount', '').lower()]
-
+    return [transaction for transaction in transactions
+            if transaction['operationAmount']['currency']['name'].startswith('руб')]
 
 def filter_transactions_by_description(transactions, search_string):
     """
