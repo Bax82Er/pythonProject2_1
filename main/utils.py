@@ -31,19 +31,20 @@ def read_json_file(file_path: str) -> list:
 
 
 def filter_transactions_by_status(transactions, status):
-    """
-    Фильтрует операции по указанному статусу.
+    # Приводим статус к нижнему регистру для унифицированного сравнения
+    normalized_status = status.strip().lower()
 
-    :param transactions: Список словарей с данными о банковских операциях.
-    :param status: Статус, по которому производится фильтрация.
-    :return: Список операций, соответствующих переданному статусу.
-    """
-    # Приведем статус к нижнему регистру для унифицированного сравнения
-    normalized_status = status.lower()
+    # Выводим данные перед фильтрацией
+    #print("Исходные данные перед фильтрацией:", transactions)
 
-    # Фильтруем операции, приводя статус к нижнему регистру для сравнения
-    return [transaction for transaction in transactions
-            if transaction.get('status', '').lower() == normalized_status]
+    # Фильтруем операции, приводя статус к нижнему регистру и удаляя пробелы
+    filtered_transactions = [transaction for transaction in transactions
+                             if transaction.get('state', '').strip().lower() == normalized_status]
+
+    # Выводим данные после фильтрации
+
+
+    return filtered_transactions
 
 
 from datetime import datetime

@@ -2,15 +2,15 @@ import os
 import json
 import csv
 import openpyxl
+import pathlib
 
 
 # Импортируем вспомогательные функции
-from utils import (
+from utils import(
     filter_transactions_by_status,
     sort_transactions_by_date,
     filter_rub_transactions,
     filter_transactions_by_description,
-
 )
 
 
@@ -21,6 +21,8 @@ def load_data_from_file(file_path):
     :param file_path: Путь к файлу с данными.
     :return: Список словарей с данными о транзакциях.
     """
+
+
     _, ext = os.path.splitext(file_path)
     if ext == ".json":
         with open(file_path, 'r') as f:
@@ -43,6 +45,20 @@ def load_data_from_file(file_path):
         raise ValueError(f"Не поддерживаемый формат файла: {file_path}")
 
 
+# Основная программа для тестирования функции
+
+
+def get_file_path(choice):
+    """Возвращает путь к файлу в зависимости от выбранного варианта."""
+    if choice == 1:
+        return pathlib.Path("main/data/transactions.json")
+    elif choice == 2:
+        return pathlib.Path("main/data/transactions.csv")
+    elif choice == 3:
+        return pathlib.Path("main/data/transactions.xlsx")
+    else:
+        return None
+
 def main():
     print("Привет! Добро пожаловать в программу работы с банковскими транзакциями.")
     print("Выберите необходимый пункт меню:")
@@ -50,23 +66,27 @@ def main():
     print("2. Получить информацию о транзакциях из CSV-файла")
     print("3. Получить информацию о транзакциях из XLSX-файла")
 
-    choice = int(input("Ваш выбор: "))
+    while True:
+        try:
+            choice = int(input("Ваш выбор: "))
+            if 1 <= choice <= 3:
+                break
+            else:
+                print("Ошибка ввода. Выберите правильный номер пункта меню.")
+        except ValueError:
+            print("Ошибка ввода. Пожалуйста, введите число.")
 
-    if choice == 1:
-        file_path = "main/data/transactions.json"
-        print(f"Для обработки выбран JSON-файл: {file_path}")
-    elif choice == 2:
-        file_path = "main/data/transactions.csv"
-        print(f"Для обработки выбран CSV-файл: {file_path}")
-    elif choice == 3:
-        file_path = "main/data/transactions.xlsx"
-        print(f"Для обработки выбран XLSX-файл: {file_path}")
+    file_path = get_file_path(choice)
+    if file_path is not None:
+        print(f"Для обработки выбран файл: {file_path}")
     else:
         print("Ошибка ввода. Выберите правильный номер пункта меню.")
-        return
 
     # Загрузка данных
     transactions = load_data_from_file(file_path)
+
+
+
 
     # Выбор статуса операции
     statuses = ["EXECUTED", "CANCELED", "PENDING"]
@@ -79,6 +99,8 @@ def main():
 
     # Фильтрация по статусу
     filtered_transactions = filter_transactions_by_status(transactions, status)
+
+    # Вывод транзакций после фильтрации по статусу
     print(f"Операции отфильтрованы по статусу: {status}")
 
     # Вопросы для уточнения выборки
@@ -106,12 +128,11 @@ def main():
         print("\nРаспечатываем итоговый список транзакций...")
         for idx, transaction in enumerate(filtered_transactions, start=1):
             print(f"{idx}. {transaction['date']} {transaction['description']}")
-            print(f"Счет: {transaction['account']}")
-            print(f"Сумма: {transaction['amount']}\n")
+            print(f"Счет: {transaction.get('account', '-')}")  # Безопасное извлечение значения
+            print(
+                f"Сумма: {transaction.get('operationAmount', {}).get('amount', '-')}\n")  # Извлекаем сумму из вложенного словаря
         print(f"\nВсего банковских операций в выборке: {len(filtered_transactions)}.")
     else:
         print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации.")
-
-
 if __name__ == "__main__":
     main()
