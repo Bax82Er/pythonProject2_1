@@ -4,6 +4,7 @@ import csv
 import openpyxl
 import pathlib
 
+import pandas as pd
 
 # Импортируем вспомогательные функции
 from utils import(
@@ -30,16 +31,13 @@ def load_data_from_file(file_path):
     elif ext == ".csv":
         transactions = []
         with open(file_path, newline='') as f:
-            reader = csv.DictReader(f)
+            reader = csv.DictReader(f, delimiter=';')
             for row in reader:
                 transactions.append(row)
         return transactions
     elif ext == ".xlsx":
-        transactions = []
-        wb = openpyxl.load_workbook(file_path)
-        ws = wb.active
-        for row in ws.iter_rows(values_only=True):
-            transactions.append(dict(zip(ws[1], row)))
+        transactions = pd.read_excel(file_path).to_dict(orient='records')
+
         return transactions
     else:
         raise ValueError(f"Не поддерживаемый формат файла: {file_path}")

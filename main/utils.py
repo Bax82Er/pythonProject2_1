@@ -39,7 +39,7 @@ def filter_transactions_by_status(transactions, status):
 
     # Фильтруем операции, приводя статус к нижнему регистру и удаляя пробелы
     filtered_transactions = [transaction for transaction in transactions
-                             if transaction.get('state', '').strip().lower() == normalized_status]
+                             if str(transaction.get('state', '')).strip().lower() == normalized_status]
 
     # Выводим данные после фильтрации
 
@@ -50,7 +50,10 @@ def filter_transactions_by_status(transactions, status):
 from datetime import datetime
 
 def sort_transactions_by_date(transactions, order="ascending"):
+    #return sorted(transactions, key=lambda x: x.get('date'), reverse='accending')
+
     """
+    
     Сортирует операции по дате.
 
     :param transactions: Список словарей с данными о банковских операциях.
@@ -81,8 +84,18 @@ def filter_rub_transactions(transactions):
     :param transactions: Список словарей с данными о банковских операциях.
     :return: Список операций, суммы которых указаны в рублях.
     """
-    return [transaction for transaction in transactions
-            if transaction['operationAmount']['currency']['name'].startswith('руб')]
+    return [
+        transaction
+        for transaction in transactions
+        if (
+                   'currency_name' in transaction and transaction['currency_name'].startswith('Rubl')
+           ) or (
+                   'operationAmount' in transaction
+                   and 'currency' in transaction['operationAmount']
+                   and 'name' in transaction['operationAmount']['currency']
+                   and transaction['operationAmount']['currency']['name'].startswith('руб.')
+           )
+    ]
 
 def filter_transactions_by_description(transactions, search_string):
     """
