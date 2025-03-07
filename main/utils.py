@@ -68,11 +68,11 @@ def sort_transactions_by_date(transactions, order="ascending"):
         except ValueError:
             continue  # Пропускаем запись, если дата имеет неправильный формат
 
-    # Сортируем операции по дате
+    # Сортируем операции по дате "ascending"
     if order == "ascending":
-        return sorted(transactions, key=lambda x: x.get('date_obj'))
+        return sorted(transactions, key=lambda x: x.get('date'))
     elif order == "descending":
-        return sorted(transactions, key=lambda x: x.get('date_obj'), reverse=True)
+        return sorted(transactions, key=lambda x: x.get('date'), reverse=True)
     else:
         raise ValueError("Неправильный порядок сортировки. Допустимые значения: 'ascending', 'descending'.")
 

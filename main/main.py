@@ -102,20 +102,36 @@ def main():
     print(f"Операции отфильтрованы по статусу: {status}")
 
     # Вопросы для уточнения выборки
-    answer = input("Отсортировать операции по дате? Да/Нет: ").lower()
-    if answer == "да":
-        order = input("Отсортировать по возрастанию или по убыванию? ").lower()
-        if order == "возрастание":
-            filtered_transactions = sort_transactions_by_date(filtered_transactions, True)
-        elif order == "убывание":
-            filtered_transactions = sort_transactions_by_date(filtered_transactions, False)
+    while True:
+        answer = input("Отсортировать операции по дате? Да/Нет: ").lower()
+        if answer == "да":
+            while True:
+                order = input("Отсортировать по возрастанию или по убыванию? ").lower()
+                if order == "возрастание":
+                    filtered_transactions = sort_transactions_by_date(filtered_transactions, "ascending")
+                    break  # Выход из внутреннего цикла после успешной сортировки
+                elif order == "убывание":
+                    filtered_transactions = sort_transactions_by_date(filtered_transactions, "descending")
+                    break  # Выход из внутреннего цикла после успешной сортировки
+                else:
+                    print("Неверный выбор. Пожалуйста, введите 'возрастание' или 'убывание'.")
+                    continue  # Повторяем внутренний цикл для нового ввода
+            break  # Выход из внешнего цикла после успешного выбора сортировки
+        elif answer == "нет":
+            break  # Выход из внешнего цикла, если сортировка не нужна
         else:
-            print("Неверный выбор. Пожалуйста, введите 'возрастание' или 'убывание'.")
-
-    answer = input("Выводить только рублевые транзакции? Да/Нет: ").lower()
-    if answer == "да":
-        filtered_transactions = filter_rub_transactions(filtered_transactions)
-
+            print("Неверный ввод. Пожалуйста, введите 'Да' или 'Нет'.")
+            continue  # Повторяем внешний цикл для нового ввода
+    while True:
+        answer = input("Выводить только рублевые транзакции? Да/Нет: ").lower()
+        if answer == "да":
+            filtered_transactions = filter_rub_transactions(filtered_transactions)
+            break # Выход из внутреннего цикла после успешной сортировки
+        elif answer == "нет":
+            break  # Выход из внешнего цикла, если сортировка не нужна
+        else:
+            print("Неверный ввод. Пожалуйста, введите 'Да' или 'Нет'.")
+            continue  # Повторяем внешний цикл для нового ввода
     answer = input("Отфильтровать список транзакций по определенному слову в описании? Да/Нет: ").lower()
     if answer == "да":
         search_term = input("Введите слово для фильтрации: ")
